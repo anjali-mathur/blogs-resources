@@ -1,0 +1,112 @@
+  <div class="col-sm-3 custom-sidebar1">
+ {% assign categories = '' %}
+  {% for tag in blogs['resources'].tags %} 
+  {% if tag contains 'category_' %}
+  {% capture categories %}{% unless categories == blank  %}{{ categories }}|{% endunless %}{{ tag | split: '_' | first }}{% endcapture %}
+  {% endif %}
+  {%if tag contains 'country_'%}
+  {% capture categories1 %}{% unless categories1 == blank  %}{{ categories1 }}|{% endunless %}{{ tag | split: '_' | first }}{% endcapture %}
+  {% endif %}
+  {% endfor %}
+  {% assign cat_array = categories | split: '|' | uniq %}
+  {% assign cat_array1 = categories1 | split: '|' | uniq %}
+  <div class="grid-uniform">
+    
+    
+    
+    {% for cat_item in cat_array1 %}
+    <h6 class="h3 {{ cat_item }}">{{ cat_item }} <span class="clear-country"> clear </span></h6>
+
+    
+    <select  class="country-list advanced-filters {{cat_item}}"> 
+      <option>Select</option>
+      {% for tag in blogs['resources'].tags %} 
+      {% assign cat = tag | split: '_' | first %}
+      {% if cat != tag and cat_item == cat %}
+      {% if current_tags contains tag %}      
+      <option data-href="/blogs/resources/tagged/{{ tag | handle }}" class="{{ tag | handle }} country-option advanced-filter active-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}" selected>{{ tag | remove_first: cat_item | remove_first: '_' |replace: '-',' '| link_to_remove_tag: tag }}</option>
+      {% else %}
+        <option data-href="/blogs/resources/tagged/{{ tag | handle }}" class="{{ tag | handle }} country-option advanced-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item  | remove_first: '_' |replace: '-',' ' |link_to_add_tag: tag }}</option>
+      {% endif %}
+      {%endif%}
+      {%endfor%}
+     
+    </select>
+    {%endfor%}
+
+    {% for cat_item in cat_array %}
+    <h6 class="h3 {{ cat_item }}">{{ cat_item }}  <span class="clear-category"> clear </span></h6>
+
+    <ul class="cat-list advanced-filters {{cat_item}}">
+      {% for tag in blogs['resources'].tags  %} 
+      {% assign cat = tag | split: '_' | first %}
+      {% if cat != tag and cat_item == cat %}
+      {% if current_tags contains tag %}
+      <li class="{{ tag | handle }} cat-option advanced-filter active-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}"> {{ tag | remove_first: cat_item | remove_first: '_' |replace: '-',' '| replace: 'and','&'| link_to_remove_tag: tag }}</li>
+      {% else %}
+      <li class="{{ tag | handle }} cat-option advanced-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item  | remove_first: '_' |replace: '-',' '| replace: 'and','&' |link_to_add_tag: tag }}</li>
+      {% endif %}
+      {%endif%}
+      {%endfor%}
+    </ul>
+    {%endfor%}
+
+    <div class="image">
+      <div class="col-sm-6">
+         <a href="{%if section.settings.blog_title_link1 != blank%}{{section.settings.blog_title_link1}}{%endif%}">
+        {% if section.settings.image1 != blank %}
+        {{ section.settings.image1 | img_url: '160x'| img_tag }}{%endif%}
+           {%if section.settings.blog_title1 != blank%}<p>{{section.settings.blog_title1}}</p>{%endif%}
+        </a>       
+      </div>
+      <div class="col-sm-6">
+         <a href="{%if section.settings.blog_title_link2 != blank%}{{section.settings.blog_title_link2}}{%endif%}">
+        {% if section.settings.image2 != blank %}
+        {{ section.settings.image2 | img_url: '160x'| img_tag }}{%endif%}       
+           {%if section.settings.blog_title2 != blank%}<p>{{section.settings.blog_title2}}</p>{%endif%}
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+"name": "resources link",
+"settings": [
+{
+"type": "image_picker",
+"id": "image1",
+"label": "Image"
+},
+{
+"type": "text",
+"id": "blog_title1",
+"label": "Heading"
+},
+{
+"type": "text",
+"id": "blog_title_link1",
+"label": "link to blog"
+},
+{
+"type": "image_picker",
+"id": "image2",
+"label": "Image"
+},
+{
+"type": "text",
+"id": "blog_title2",
+"label": "Heading"
+},
+{
+"type": "text",
+"id": "blog_title_link2",
+"label": "link to blog"
+}
+]
+}
+{% endschema %}
