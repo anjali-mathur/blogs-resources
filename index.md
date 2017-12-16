@@ -1,37 +1,110 @@
-## Welcome to GitHub Pages
+    
+  {%section 'resources-section'%} 
+ 
+  <div class="row custom-filter"> 
+   {%section 'resource-filter'%}
+   {%include 'resource-filter'%}
+  </div>
 
-You can use the [editor on GitHub](https://github.com/anjali-mathur/blogs-resources/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+ 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+ <script>
+   $(function() { 
+    var  activeCategory =  $('.active-filter[data-group="category"]').data('handle');
+    var  activeCountry  =  $('.country-list option:selected').data('handle');
+   $(document).on('change', '.country-list', function(e){
+     e.preventDefault();
+     el = $('option:selected');
+     activeCountry = el.data('handle');
+     filter_data();
+   });
+     
+     $(document).on('click', '.clear-country', function(e){
+     e.preventDefault();
+     activeCountry = '';
+     filter_data();
+   });
+       
+     
+   $(document).on('click', '.cat-option', function(e){
+     e.preventDefault();
+     el = $(this);
+     activeCategory = el.data('handle');
+     filter_data(); 
+   });
+     
+       $(document).on('click', '.clear-category', function(e){
+     e.preventDefault();
+     el = $(this);
+     activeCategory = '';
+     filter_data(); 
+   });
+   		
+   function filter_data(){
+    
+      var base_url = window.location.origin+'/blogs/resources/';
+      var slug = '';
+     if(activeCategory || activeCountry){
+        slug += 'tagged/';
+     }  
+     
+     if(activeCategory){
+       slug += activeCategory;   
+     }
+     
+     if(activeCategory && activeCountry){
+        slug += '+';
+     } 
+     
+     if(activeCountry){
+       slug += activeCountry;   
+     }
+     var get_url = base_url+slug;
+      $('.resource-right').html('<div class="_jsLoaderDiv"><img class="_jsLoader" src="https://cdn.shopify.com/s/files/1/2358/5863/t/5/assets/loading.gif" ></div>');
+      $.get(get_url, function(data){
+	    $content =  $(data).find('.custom-filter').html();
+        $('.custom-filter').html($content);
+        history.pushState('', '', get_url);
+        
+      });
+   }  
+   });
+   </script>
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+<script>
 
-# Header 1
-## Header 2
-### Header 3
+window.onscroll = function (e) {  
+ var h1 = $(window).scrollTop() + $(window).height() +300 ;
+  var h2 = $(document).height();
+//   console.log(h1);
+//   console.log(h2);
+  
+  if(h1 >= h2) {
+//       $(".custom-sidebar").addClass("sticky-fix-bottom");
+  }else{
+//     $(".custom-sidebar").removeClass("sticky-fix-bottom");
+  }
+  
+// called when the window is scrolled.  
+  var scroll = $(window).scrollTop();
+  if(scroll >= 420){
+   $(".custom-sidebar1").addClass("sticky-fix");     
+  }else{
+    $(".custom-sidebar1").removeClass("sticky-fix"); 
+  }
+  
+  if(h1 >= h2) {
+//       $(".custom-sidebar").addClass("sticky-fix-bottom");
+  }else{
+    $(".custom-sidebar1").css("top", scroll+"px");
+//     $(".custom-sidebar").removeClass("sticky-fix-bottom");
+  }
+//   $(".custom-sidebar").css("top", scroll+"px");
+  
+ 
+} 
+ 
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/anjali-mathur/blogs-resources/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+   </script>
