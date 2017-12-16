@@ -1,0 +1,87 @@
+<div class="col-sm-9 resource-right hideclass"> 
+  {% paginate blog.articles by 160 %} 
+<div class="EndlessScroll">
+  
+   <div class="row">
+     {% assign articles = blog.articles | sort: 'title'%}
+     
+      
+    {% for article in articles %} 
+    
+    {%if article.tags contains 'type_download'%}
+    <div class="col-sm-6 col-md-6 col-xs-6  {% for tag in article.tags %} {{ tag | handlize }} {% endfor %}">
+     <div class="row">
+      <div class="col-sm-6">
+      <div class="image">  <img src="{{ article.image.src | img_url: 'large' }}" alt="{{ article.image.alt }}">
+        {%assign pdf = article.content | split: '<div class="page-break"></div>'%}
+        <div class="download-link bar"> <span class="a-link window_content"> {{pdf[1]}} </span> </div>
+        
+        <div class="colore {% for tag in article.tags %} {{ tag | handlize  }} {% endfor %}"></div>
+      </div>
+       </div>
+      <div class="text col-sm-6">
+        <h2><a class="title-pdf-link">{{ article.title }}</a></h2>
+ </div>
+      </div>
+      </div> 
+    {%else article.tags contains 'type_article' %}
+    <div class="col-sm-6 col-md-6 col-xs-6  {% for tag in article.tags %} {{ tag | handlize }} {% endfor %}">
+    <div class="row">
+      <div class="col-sm-6">
+         <div class="image">   <img src="{{ article.image.src | img_url: 'large' }}" alt="{{ article.image.alt }}">
+        <div class="mor-info bar"> <span> <a target="_blank" href="{{ article.url }}">More Info</a> </span> </div>
+          <div class="colore {% for tag in article.tags %} {{ tag | handlize }} {% endfor %}"></div>
+        </div>   </div>
+
+      <div class="text col-sm-6">
+              <h2><a href="{{article.url}}">{{ article.title }}</a></h2>
+             </div>
+      </div>
+    </div>
+    {%endif%}
+    {%endfor%}
+    </div>
+  
+  
+  {% if paginate.pages > 1 %}
+          {% if paginate.next %}
+          <div class="paginationbilal">
+            <a href="{{ paginate.next.url }}">Loading More</a>
+          </div>
+        {% endif %}
+          
+  {% endif %}
+</div>
+ 
+{% endpaginate %}
+  
+  
+</div>
+  
+  
+
+
+
+<script type="text/javascript">     
+ $(function(){       
+   $('.type_download').each(function(){            
+          var link = $(this).find('.image .download-link span > a').attr('href');   
+	      $(this).find('.text h2 > a').attr("href",link)	
+          $(this).find('.text h2 > a').attr("target","_blank")	
+      })
+    });
+</script>
+
+
+<script>
+$(document).ready(function(){
+  ajaxify();
+}); </script>
+  <script>
+$(document).ready(function(){
+  $('.hideclass').hide();
+  $(".advanced-filter").click(function(){
+    $('.hideclass').show();
+  });
+});
+ </script>
