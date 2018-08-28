@@ -1,0 +1,69 @@
+# nav bread in to div
+
+<ul class="nav">       
+  {% for link in linklists[section.settings.main_nav ].links %}         
+  {% if linklists[link.handle] and linklists[link.handle].links.size > 0 %}
+  <li class="dropdown has_sub_menu" aria-haspopup="true" aria-expanded="false">
+    <a class="dlink" href="{{ link.url }}">{{ link.title | escape }}</a>
+    <ul class="submenu">
+      {% for l in linklists[link.handle].links %}
+      
+      {% assign loop  = forloop.index |  minus: 1  %}
+      
+      {% assign start = loop | modulo:15 %}
+      
+      {% assign end = forloop.index | modulo:15 %}
+      
+      {% if start == 0 %}
+      	<div class ="custome">
+      {% endif %}
+          
+          
+      {%- comment %}<locksmith:c761>{% endcomment -%}
+        {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: l, locksmith_subject_parent: linklists[link.handle] %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
+      {%- comment %}</locksmith:c761>{% endcomment -%}
+      {% if linklists[l.handle] and linklists[l.handle].links.size > 0 %} 
+      <li class="nest has_sub_menu " aria-haspopup="true" aria-expanded="false">
+        <a href="{{ l.url }}">{{ l.title }}</a> 
+        <ul class="nested">
+          {% for l in linklists[l.handle].links %}
+          {%- comment %}<locksmith:d651>{% endcomment -%}
+            {%- include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: l, locksmith_subject_parent: linklists[l.handle] %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif -%}
+          {%- comment %}</locksmith:d651>{% endcomment -%}
+          <li><a href="{{ l.url }}">{{ l.title }}</a></li>
+         
+          
+          {% endfor %}
+        </ul>
+      </li>
+      {% else %}
+      <li class="lenth-of-ele nav-li-{{forloop.index}}"><a href="{{ l.url }}">{{ l.title }}</a></li>
+      {% endif %}
+    
+          
+     {% if end == 0 %}
+       </div>
+     {% endif %}
+          
+          {% endfor %}
+     {% if end != 0 %}
+       </div>
+     {% endif %}
+      
+      
+    </ul>
+  </li>
+  {% else %}
+  <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+  {% endif %}
+  {% endfor %}        
+</ul>
+
+
+<script>
+$( document ).ready(function() {
+    var numItems = $('.submenu .lenth-of-ele').length
+   alert(numItems);
+});
+
+</script>
